@@ -1,0 +1,11 @@
+<component name="libraryTable">
+  <library name="Gradle: de.felixschulze.teamcity:teamcity-status-message-helper:1.2">
+    <CLASSES>
+      <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/de.felixschulze.teamcity/teamcity-status-message-helper/1.2/68b7d05c08d00df091514ac4b3b674decf8e50c5/teamcity-status-message-helper-1.2.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES>
+      <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/de.felixschulze.teamcity/teamcity-status-message-helper/1.2/55423ae7f433a9807d655e904c3ee09912d6c1e8/teamcity-status-message-helper-1.2-sources.jar!/" />
+    </SOURCES>
+  </library>
+</component>
