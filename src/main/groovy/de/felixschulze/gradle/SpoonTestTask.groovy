@@ -61,7 +61,6 @@ class SpoonTestTask extends DefaultTask {
     String testMethodName
 
 
-
     Collection<String> excludedDevices
 
     String singleDevice
@@ -83,6 +82,10 @@ class SpoonTestTask extends DefaultTask {
 
         singleDevice = project.spoon.singleDevice
 
+        if (singleDevice == null) {
+            singleDevice=""
+        }
+
         SpoonRunner.Builder spoonRunnerBuilder = new SpoonRunner.Builder()
                 .setTitle(title)
                 .setApplicationApk(applicationApk)
@@ -98,28 +101,27 @@ class SpoonTestTask extends DefaultTask {
                 .setClassName(testClassName)
                 .setMethodName(testMethodName)
 
-        if (excludedDevices.empty && singleDevice.empty) {
+            if (excludedDevices.empty && singleDevice.isEmpty()) {
             spoonRunnerBuilder.useAllAttachedDevices()
-        }
-
-        else {
+            logger.info("singleDevice: ${singleDevice}")
+        } else {
 
             Set<String> devices = SpoonUtils.findAllDevices(SpoonUtils.initAdb(cleanFile(sdkDir), project.spoon.adbTimeout * 1000))
             devices.each {
-
                 if (!singleDevice.empty && singleDevice.contains(it)) {
-                    logger.info("run on Device:${it}")
+                    logger.info("Use device: ${it}")
                     spoonRunnerBuilder.addDevice(it)
                 } else {
-                    if (excludedDevices.contains(it)) {
+                    if (!excludedDevices.empty && excludedDevices.contains(it)) {
                         logger.info("Skip device: ${it}")
-                    } else {
+                    } else if (singleDevice.empty) {
                         logger.info("Use device: ${it}")
                         spoonRunnerBuilder.addDevice(it)
                     }
                 }
             }
         }
+
 
         Collection<String> instrumentationArgs = project.spoon.instrumentationArgs
         if (!instrumentationArgs.empty) {
@@ -147,7 +149,7 @@ class SpoonTestTask extends DefaultTask {
 
         if (project.spoon.zipReport) {
             new AntBuilder().zip(
-                    destfile: new File(project.getBuildDir(),"spoon.zip").absolutePath,
+                    destfile: new File(project.getBuildDir(), "spoon.zip").absolutePath,
                     basedir: output.absolutePath
             )
         }
@@ -178,7 +180,7 @@ class SpoonTestTask extends DefaultTask {
 
     private boolean logJUnitXmlToTeamCity() {
         File jUnitDir = new File(output, "junit-reports")
-        logger.debug("Looking for junit-reports in: "+jUnitDir.absolutePath)
+        logger.debug("Looking for junit-reports in: " + jUnitDir.absolutePath)
         if (jUnitDir.exists()) {
             jUnitDir.eachFile {
                 if (it.name.endsWith('.xml')) {
